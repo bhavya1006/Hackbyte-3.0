@@ -71,10 +71,9 @@ chrome.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({
-                      query,
-                      screenshot: screenshotUrl,
-                      bodyHtml,
-                      elements,
+                      task_description:query,
+                      image_base64: screenshotUrl,
+                      ui_elements:elements
                     }),
                   }
                 );
