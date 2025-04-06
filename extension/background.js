@@ -63,34 +63,74 @@ chrome.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
                 const bodyHtml = document.body.outerHTML;
                 const elements = extractTags();
 
-                console.log("New screenshot captured for this iteration", screenshotUrl);
+                // console.log("New screenshot captured for this iteration", screenshotUrl);
 
                 const response = await fetch(
-                  "http://localhost:3000/api/hello",
+                  "http://localhost:8000/analyze_ui",
                   {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({
-                      task_description:query,
+                      task_description: query,
                       image_base64: screenshotUrl,
-                      ui_elements:elements
+                      ui_elements: elements,
                     }),
                   }
                 );
-
+                console.log("Response:", JSON.stringify(response));
                 if (!response.ok)
                   throw new Error(
                     `API call failed with status ${response.status}`
                   );
                 const data = await response.json();
-                console.log(`API Response:`, data);
+                // console.log(`API Response:`, data);
 
-                const targetId = data.id || "default-target";
-                const target = document.getElementById(targetId);
-                if (!target) {
-                  alert(`Element with ID "${targetId}" not found.`);
-                  return;
-                }
+                const findElementByAttributes = (data) => {
+                  const elements = Array.from(document.querySelectorAll("*"));
+
+                  // Helper function to clean and normalize text for comparison
+                  const normalizeText = (text) => {
+                    return (
+                      text
+                        ?.trim()
+                        ?.toLowerCase()
+                        ?.replace(/\s+/g, " ") // normalize whitespace
+                        ?.replace(/[^\w\s]/g, "") || // remove special characters
+                      ""
+                    );
+                  };
+
+                  return (
+                    elements.find((el) => {
+                      if (data.id && el.id === data.id) return true;
+
+                      // Get both innerHTML and textContent for comparison
+                      const elementText = normalizeText(el.textContent);
+                      const targetText = normalizeText(data.text);
+
+                      // Match by normalized text content and tag name
+                      if (
+                        (elementText.includes(targetText) ||
+                          targetText.includes(elementText)) &&
+                        el.tagName.toLowerCase() === data.tagName.toLowerCase()
+                      ) {
+                        console.log("Matched element:", el);
+                        console.log("Element text:", elementText);
+                        console.log("Target text:", targetText);
+                        return true;
+                      }
+
+                      return false;
+                    }) || null
+                  );
+                };
+
+                // Usage:
+                const mostMatchedElement = findElementByAttributes(data);
+                console.log("Matching elements:", mostMatchedElement);
+
+                // Use the first matching element as our target
+                const target = mostMatchedElement;
 
                 const popup = document.createElement("div");
                 popup.className = "custom-popup";
@@ -146,7 +186,7 @@ chrome.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
 
                 if (!isFinished) {
                   console.log("Waiting 1s before next call...");
-                  await new Promise((r) => setTimeout(r, 1000));
+                  await new Promise((r) => setTimeout(r, 5000));
                 }
               }
 
