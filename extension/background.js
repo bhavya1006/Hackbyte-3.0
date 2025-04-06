@@ -88,35 +88,16 @@ chrome.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
                 const findElementByAttributes = (data) => {
                   const elements = Array.from(document.querySelectorAll("*"));
 
-                  // Helper function to clean and normalize text for comparison
-                  const normalizeText = (text) => {
-                    return (
-                      text
-                        ?.trim()
-                        ?.toLowerCase()
-                        ?.replace(/\s+/g, " ") // normalize whitespace
-                        ?.replace(/[^\w\s]/g, "") || // remove special characters
-                      ""
-                    );
-                  };
-
                   return (
                     elements.find((el) => {
                       if (data.id && el.id === data.id) return true;
 
-                      // Get both innerHTML and textContent for comparison
-                      const elementText = normalizeText(el.textContent);
-                      const targetText = normalizeText(data.text);
-
-                      // Match by normalized text content and tag name
+                      // Match by text content and tag name
                       if (
-                        (elementText.includes(targetText) ||
-                          targetText.includes(elementText)) &&
+                        el.innerHTML === data.text &&
                         el.tagName.toLowerCase() === data.tagName.toLowerCase()
                       ) {
                         console.log("Matched element:", el);
-                        console.log("Element text:", elementText);
-                        console.log("Target text:", targetText);
                         return true;
                       }
 
@@ -126,8 +107,13 @@ chrome.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
                 };
 
                 // Usage:
-                const mostMatchedElement = findElementByAttributes(data);
+                const mostMatchedElement = findElementByAttributes(data); // Removed await since function is not async
+
                 console.log("Matching elements:", mostMatchedElement);
+                // if (matchingElements.length === 0) {
+                //   alert(`No elements found with the provided attributes`);
+                //   return;
+                // }
 
                 // Use the first matching element as our target
                 const target = mostMatchedElement;
