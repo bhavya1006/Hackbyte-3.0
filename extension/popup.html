@@ -35,7 +35,7 @@
         border: none;
         border-radius: 10px;
         cursor: pointer;
-        margin-bottom: 10px; /* Added margin for spacing */
+        margin-bottom: 10px;
       }
 
       button:hover {
@@ -44,26 +44,12 @@
     </style>
   </head>
   <body>
-    <!-- Input area for query -->
-    <!-- New User Manual button -->
     <button id="user-manual">User Manual</button>
     <textarea
       id="query-input"
       placeholder="Write your query here..."
     ></textarea>
     <button id="send-query">Send Query</button>
-    <script>
-      document
-        .getElementById("user-manual")
-        .addEventListener("click", function () {
-          chrome.windows.create({
-            url: chrome.runtime.getURL("user-manual.html"),
-            type: "popup",
-            width: 800,
-            height: 600,
-          });
-        });
-    </script>
     <script src="popup.js"></script>
   </body>
 </html>

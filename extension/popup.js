@@ -9,5 +9,5 @@ document.getElementById('send-query').addEventListener('click',async () => {
     await chrome.runtime.sendMessage({ action: 'startQuery', query });
 
     // Close the popup immediately
-    // window.close();
+    window.close();
 });
