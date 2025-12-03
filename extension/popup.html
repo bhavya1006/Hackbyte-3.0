@@ -16,7 +16,7 @@
 
       textarea {
         display: flex;
-        flex:1;
+        flex: 1;
         height: 100px;
         margin-bottom: 10px;
         padding: 10px;
@@ -35,7 +35,7 @@
         border: none;
         border-radius: 10px;
         cursor: pointer;
-        margin-bottom: 10px; /* Added margin for spacing */
+        margin-bottom: 10px;
       }
 
       button:hover {
@@ -44,16 +44,12 @@
     </style>
   </head>
   <body>
-    <!-- Input area for query -->
-    <!-- New User Manual button -->
     <button id="user-manual">User Manual</button>
-    <textarea id="query-input" placeholder="Write your query here..."></textarea>
+    <textarea
+      id="query-input"
+      placeholder="Write your query here..."
+    ></textarea>
     <button id="send-query">Send Query</button>
-    <script>
-      document.getElementById('user-manual').addEventListener('click', () => {
-        chrome.tabs.create({ url: chrome.runtime.getURL('user-manual.html') }); // Open user manual in a new tab
-      });
-    </script>
     <script src="popup.js"></script>
   </body>
 </html>

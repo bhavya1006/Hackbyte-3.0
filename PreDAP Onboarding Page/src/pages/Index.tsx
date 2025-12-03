@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import Navbar from '@/components/Navbar';
@@ -54,11 +53,16 @@ const Index = () => {
             </div>
             <div className="mt-16 w-full max-w-4xl mx-auto rounded-2xl overflow-hidden shadow-xl animate-fade-in">
               <div className="relative w-full pt-[56.25%] bg-gradient-to-r from-blue-800 to-blue-900 rounded-2xl overflow-hidden">
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="text-white text-xl font-medium">
-                    PreDap Demo Video
-                  </div>
-                </div>
+                <video
+                  className="absolute inset-0 w-full h-full object-cover"
+                  src="/Recording 2025-04-06 095208.mp4"
+                  controls
+                  preload="metadata"
+                  poster="/placeholder.svg"
+                >
+                  <source src="/Recording 2025-04-06 095208.mp4" type="video/mp4" />
+                  Your browser does not support the video tag.
+                </video>
               </div>
             </div>
           </div>
